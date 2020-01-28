@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model IEnumerable<MicroondasDigital.Models.Programa>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="text-center">MICROONDAS DIGITAL</h3></div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Executar", "Home", FormMethod.Post))
+                    {
+                        <input type="hidden" name="caracter" id="caracter" value="." />
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="alimento">Alimento</label>
+                                    <input type="text" class="form-control" name="alimento" id="alimento" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="programa">Programa</label>
+                                    <select name="programa" id="programa" class="form-control">
+                                        <option value="default" data-tempo="30" data-potencia="8" data-caracter=".">--- Customizado ---</option>
+                                        @foreach (var item in Model)
+                                        {
+                                            <option value="@item.nome" data-tempo="@item.tempo" data-potencia="@item.potencia" data-caracter="@item.caracter">@item.nome</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="tempo">Tempo de cozinhamento(seg)</label>
+                                    <input type="text" class="form-control" name="tempo" id="tempo" />
+                                    <small class="form-text text-muted">Min: 1seg - Max: 2min</small>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label for="potencia">Potência</label>
+                                    <select name="potencia" id="potencia" class="form-control">
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i" selected>@i</option>
+                                        }
+                                    </select>
+                                    <small class="form-text text-muted">Min: 1 - Max: 10</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <button type="button" id="btn-aquecimento-rapido" class="btn btn-warning"><span class="glyphicon glyphicon-cog"></span> Aquecimento Rápido</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-lg-offset-3">
+                                <div class="form-group">
+                                    <button type="submit" id="btn-aquecer" class="btn btn-success"><span class="glyphicon glyphicon-time"></span> Iniciar</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-lg-offset-3">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary pause"> Pausar</button>
+                                    <button type="button" class="btn btn-primary play" style="display: none;"> Retomar</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-danger cancel"> Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="panel-footer">
+                    @if (ViewData.ModelState.Keys.Any(k => ViewData.ModelState[k].Errors.Any()))
+                    {
+                        <div class="alert alert-danger">
+                            <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="/Scripts/microondas/index.js"></script>
+}
+
